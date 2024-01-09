@@ -10,8 +10,12 @@
 import json
 import sys
 from pathlib import Path
+import logging
 
 import setuptools
+from setuptools.command.install import install
+
+logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG)
 
 HERE = Path(__file__).parent.resolve()
 
@@ -42,6 +46,56 @@ long_description = (HERE / "README.md").read_text()
 
 # Get the package info from package.json
 pkg_json = json.loads((HERE / "package.json").read_bytes())
+
+
+class CustomInstallation(install):
+    
+    def load_kernel_extension(self):
+        '''Modify the system wide IPython configuration 
+        to load the rucio-jupyterlab IPython extension at startup
+        '''
+        
+        # Set path to config and ipython extension module
+        config_folder = Path(sys.prefix) / 'etc' / 'ipython'
+        file_path = config_folder / 'ipython_kernel_config.json'
+        extension_module = 'rucio_jupyterlab.kernels.ipython'
+    
+        # Load the existing IPython kernel JSON configuration
+        if not file_path.is_file():
+            config_folder.mkdir(parents=True, exist_ok=True)
+            config_json = {}
+        else:
+            with open(file_path, 'r') as f:
+                config_payload = f.read()
+            config_json = json.loads(config_payload)
+    
+        # Add the needed attributes to enable the extension
+        if 'IPKernelApp' not in config_json:
+            config_json['IPKernelApp'] = {}
+    
+        ipkernel_app = config_json['IPKernelApp']
+    
+        if 'extensions' not in ipkernel_app:
+            ipkernel_app['extensions'] = []
+    
+        if extension_module not in ipkernel_app['extensions']:
+            ipkernel_app['extensions'].append(extension_module)
+    
+        # Write the configuration back to the file
+        with open(file_path, 'w') as f:
+            f.write(json.dumps(config_json, indent=2))
+    
+    
+    def run(self):
+        try:
+            logging.info('Try to load ipykernel extension by default')
+            self.load_kernel_extension()
+        except Exception as e:
+            logging.error('An error occurred when loading the rucio_jupyterlab.kernels.ipython extension')
+            logging.info(e, exc_info=True)
+        
+        install.run(self)
+
 
 setup_args = dict(
     name=name,
@@ -83,7 +137,11 @@ setup_args = dict(
         # "Framework :: Jupyter :: JupyterLab :: Extensions",
         # "Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt",
     ],
+    cmdclass={'install': CustomInstallation},
 )
+
+
+
 
 try:
     from jupyter_packaging import (
@@ -94,11 +152,12 @@ try:
     post_develop = npm_builder(
         build_cmd="install:extension", source_dir="src", build_dir=lab_path
     )
-    setup_args["cmdclass"] = wrap_installers(post_develop=post_develop, ensured_targets=ensured_targets)
+    cmd_class_prebuild = wrap_installers(post_develop=post_develop, ensured_targets=ensured_targets)
+    setup_args["cmdclass"].update(cmd_class_prebuild)
     setup_args["data_files"] = get_data_files(data_files_spec)
+    logging.info(f'Setup args prepared')
 except ImportError as e:
-    import logging
-    logging.basicConfig(format="%(levelname)s: %(message)s")
+
     logging.warning("Build tool `jupyter-packaging` is missing. Install it with pip or conda.")
     if not ("--name" in sys.argv or "--version" in sys.argv):
         raise e
