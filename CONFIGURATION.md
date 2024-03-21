@@ -20,7 +20,7 @@ In this mode, the extension downloads the files to the user directory. This is u
 The extension can be configured locally or remotely.
 
 ### Local Configuration
-In your Jupyter configuration (could be `~/.jupyter/jupyter_notebook_config.json`), add the following snippet:
+In your Jupyter configuration (could be `~/.jupyter/jupyter_server_config.json`), add the following snippet:
 ```json
 {
     "RucioConfig": {
