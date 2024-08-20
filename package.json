@@ -91,8 +91,12 @@
     "react-popover": "^0.5.10",
     "react-select": "^5.8.0",
     "react-virtualized-auto-sizer": "^1.0.24",
-    "react-window": "^1.8.6",
-    "workspace": "^0.0.1-preview.1"
+    "react-window": "^1.8.6"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "webpack": "^5.0.0"
   },
   "devDependencies": {
     "@jupyterlab/builder": "^4.0.0",

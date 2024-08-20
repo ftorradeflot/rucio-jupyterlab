@@ -10961,8 +10961,11 @@ __metadata:
     stylelint-prettier: ^4.0.0
     ts-jest: ^29.1.2
     typescript: ~5.0.2
-    workspace: ^0.0.1-preview.1
     yjs: ^13.5.40
+  peerDependencies:
+    react: ^18.0.0
+    react-dom: ^18.0.0
+    webpack: ^5.0.0
   languageName: unknown
   linkType: soft
 
@@ -13171,13 +13174,6 @@ __metadata:
   version: 6.2.1
   resolution: "workerpool@npm:6.2.1"
   checksum: c2c6eebbc5225f10f758d599a5c016fa04798bcc44e4c1dffb34050cd361d7be2e97891aa44419e7afe647b1f767b1dc0b85a5e046c409d890163f655028b09d
-  languageName: node
-  linkType: hard
-
-"workspace@npm:^0.0.1-preview.1":
-  version: 0.0.1-preview.1
-  resolution: "workspace@npm:0.0.1-preview.1"
-  checksum: 0d3a1ed8a5735bd3295f2685a92cfd59a53d9386d6177e3dc036416e0b200729632a3760d9b34d75597b826e30620d7b02d9852c9bc2e0028c64436c9c5cda2e
   languageName: node
   linkType: hard
 
