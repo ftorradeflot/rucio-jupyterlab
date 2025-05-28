@@ -47,7 +47,7 @@ it is assumed that the dummy data was already created and this step is skipped.
 Once the script is executed it will take some time for the rucio-jupyterlab container
 to be ready. It has to install all the dependencies, build the extension, ...
 The progress of the setup can be tracked through the container logs
-`docker logs -t dev-rucio-jupyterlab-1` . When the process finishes there will be 
+`docker logs -t rucio-rucio-jupyterlab-1` . When the process finishes there will be 
 this message in the logs
 ```
 [I 2024-02-08 12:42:04.428 ServerApp] Jupyter Server 1.24.0 is running at:
