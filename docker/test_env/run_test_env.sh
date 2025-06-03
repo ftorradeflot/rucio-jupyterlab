@@ -36,9 +36,9 @@ fi
 
 # Run Docker Compose with the chosen file and profile
 docker compose \
-  --file rucio/etc/docker/dev/docker-compose.yml \
-  --file docker-compose-extension.yml \
-  --profile storage --profile extension up -d
+	--file rucio/etc/docker/dev/docker-compose.yml \
+	--file docker-compose-extension.yml \
+	--profile storage --profile extension --profile iam up -d
 
 
 # Login into rucio dev container and run some tests, create some RSEs,

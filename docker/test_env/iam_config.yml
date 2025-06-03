@@ -1,0 +1,6 @@
+iam:
+  local-authn:
+    # possible values for enabled-for: all, vo-admins, none
+    enabled-for: all
+    # possible values: hidden, hidden-with-link, visible
+    login-page-visibility: visible
