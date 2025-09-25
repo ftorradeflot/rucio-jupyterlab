@@ -36,9 +36,9 @@ fi
 
 # Run Docker Compose with the chosen file and profile
 docker compose \
-  --file rucio/etc/docker/dev/docker-compose.yml \
-  --file docker-compose-extension.yml \
-  --profile storage --profile extension up -d
+	--file rucio/etc/docker/dev/docker-compose.yml \
+	--file docker-compose-extension.yml \
+	--profile storage --profile extension --profile iam up -d
 
 
 # Login into rucio dev container and run some tests, create some RSEs,
@@ -68,7 +68,7 @@ then
   # otherwise exit with an error code
   if [ "$DB_IS_READY" = true ]; then
     RUCIO_CONTAINER=$(docker ps --filter "name=^/dev[-_]rucio[-_]1$" --format "{{.Names}}")
-    docker exec -it ${RUCIO_CONTAINER} /bin/bash -c "tools/run_tests.sh -ir"
+    docker exec -it ${RUCIO_CONTAINER} /bin/bash -c "tools/run_tests.sh -iar"
   else
     echo "DB is not ready"
     exit 1

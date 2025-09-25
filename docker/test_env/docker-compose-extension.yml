@@ -10,6 +10,10 @@ services:
     depends_on:
       - ruciodb
     image: docker.io/rucio/rucio-dev:${RUCIO_IMG}
+    environment:
+      - RUCIO_ENABLE_LOGS=True
+    volumes:
+      - /tmp/rucio_logs:/var/log/httpd
   rucio-jupyterlab:
     image: "rucio-jupyterlab"
     build:
@@ -24,7 +28,8 @@ services:
       - ../../certs/ruciouser.pem:/opt/rucio/etc/usercert.pem:z
       - ../../certs/ruciouser.key.pem:/opt/rucio/etc/userkey.pem:z
       - ../../../../../..:/rucio-jupyterlab:Z
-      - /tmp/rucio_xrd1:/tmp/rucio_xrd1:z
+      - /tmp/rucio_xrd1:/tmp/rucio_xird1:z
+      - ../../../../token.json:/tmp/rucio_token.json
     environment:
       - X509_USER_CERT=/opt/rucio/etc/usercert.pem
       - X509_USER_KEY=/opt/rucio/etc/userkey.pem
@@ -40,6 +45,8 @@ services:
       - RUCIO_RSE_MOUNT_PATH=/tmp/rucio_xrd1
       - RUCIO_LOG_LEVEL=debug
       - CONTAINER_PURPOSE=develop
+      - RUCIO_OIDC_AUTH=file
+      - RUCIO_OIDC_FILE_NAME=/tmp/rucio_token.json
     ports:
       - "8888:8888"
   xrd1:
@@ -64,3 +71,26 @@ services:
     extends:
       file: docker-compose.yml
       service: xrd4
+  indigoiam-login-service:
+    extends:
+      file: docker-compose.yml
+      service: indigoiam-login-service
+    volumes:
+      - ../../../../iam_config.yml:/indigo-iam/config/config.yml:Z
+  nginx-proxy:
+    image: nginx:latest
+    profiles:
+      - extension
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8443:8443"
+    volumes:
+      - ../../../../nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../../certs/hostcert_keycloak.pem:/etc/nginx/certs/keycloak.crt:z
+      - ../../certs/hostcert_keycloak.key.pem:/etc/nginx/certs/keycloak.key:z
+      - ../../../../dhparam.pem:/etc/nginx/dhparam/dhparam.pem:ro
+      - ../../certs/hostcert_indigoiam.pem:/etc/nginx/certs/indigoiam.pem:z
+      - ../../certs/hostcert_indigoiam.key.pem:/etc/nginx/certs/indigoiam.key:z
+      - ../../certs/hostcert_rucio.pem:/etc/nginx/certs/rucio.pem:z
+      - ../../certs/hostcert_rucio.key.pem:/etc/nginx/certs/rucio.key:z
