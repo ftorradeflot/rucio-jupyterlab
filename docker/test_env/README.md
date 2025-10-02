@@ -128,4 +128,58 @@ Then run these commands
     rucio-conveyor-poller --run-once --older-than 0
     rucio-conveyor-finisher --run-once
 
+## OIDC authentication
+
+If you want to use OIDC authentication you have to request a token from IndigoIAM
+
+### Accessing services in the cluster
+
+To be able to access services running in the test cluster (IndigoIAM, Rucio & Keycloak) through the nginx proxy,
+you need to add this content to the `/etc/hosts` file in your computer:
+
+```
+127.0.0.1 indigoiam
+127.0.0.1 keycloak
+127.0.0.1 rucio
+```
+
+### Get an OIDC token with IndigoIAM
+
+Execute the `get-access-token-password.sh` script to get a token and write it in the `rucio_token` file. This file is mounted inside the rucio-jupyterlab container, although you might need to restart the container to make it available.
+
+Take care to update the client id and the secret if needed.
+
+You can access the indigoiam at `https://indigoiam:443` with `admin:password` credentials,
+and check the client id and secret.
+
+Also the redirect uris have to be set:
+* https://rucio/auth/oidc_token
+* https://rucio/auth/oidc_code
+
+### Log in to Rucio with OIDC
+
+Add OIDC identity to root account if it's not already there
+
+```
+rucio-admin identity add --account root --type OIDC --id "SUB=73f16d93-2441-4a50-88ff-85360d78c6b5, ISS=https://indigoiam/" --email admin@iam.test
+```
+
+Log in using OIDC
+
+```
+rucio -S oidc --oidc-scope ruciodev --oidc-issuer indigoiam --oidc-scope "openid profile" --oidc-audience rucio -vvv whoami
+```
+
+which will redirect you to the browser. Or
+```
+rucio -S oidc --oidc-auto --oidc-user admin --oidc-password password --oidc-scope ruciodev --oidc-issuer indigoiam --oidc-scope "openid profile" --oidc-audience rucio -vvv whoami
+```
+
+
+
+
+
+
+
+
 

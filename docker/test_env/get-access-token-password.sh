@@ -1,11 +1,10 @@
 #!/bin/bash
-
 IAM_CLIENT_ID=85e6f7a5-580b-4a1c-a6d2-39055143063d
-IAM_CLIENT_SECRET=AL60w8VzjLx3l6ioVRooyHvpcAvbDsZiA7I4AYcGc3JzsKJhjHAuODQYOkzcJvvXLAoTfsSsNysX2odcRLfSUiQ
+IAM_CLIENT_SECRET=AIYIneAVGs9PTVvQnxNGqDmh3rNTsyFOrrwRIqy1Zc6ngPN9hQe6I2VzDzN2uGLCPsvQI8nhYxf_V09NHk-yv7o
 IAM_USER=admin
 IAM_PASSWORD=password
 IAM_TOKEN_ENDPOINT=https://indigoiam//token
-
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 result=$(curl -k -s -L \
   -d client_id=${IAM_CLIENT_ID} \
@@ -26,5 +25,5 @@ fi
 echo $result
 
 access_token=$(echo $result | jq -r .access_token)
-
-echo "export IAM_ACCESS_TOKEN=\"${access_token}\""
+printf "%s" "$access_token" > "$SCRIPT_DIR/rucio_token"
+echo ${access_token} | cut -d "." -f 2 | base64 -d | jq .

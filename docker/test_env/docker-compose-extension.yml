@@ -29,7 +29,7 @@ services:
       - ../../certs/ruciouser.key.pem:/opt/rucio/etc/userkey.pem:z
       - ../../../../../..:/rucio-jupyterlab:Z
       - /tmp/rucio_xrd1:/tmp/rucio_xird1:z
-      - ../../../../token.json:/tmp/rucio_token.json
+      - ../../../../rucio_token:/tmp/rucio_token
     environment:
       - X509_USER_CERT=/opt/rucio/etc/usercert.pem
       - X509_USER_KEY=/opt/rucio/etc/userkey.pem
@@ -46,7 +46,7 @@ services:
       - RUCIO_LOG_LEVEL=debug
       - CONTAINER_PURPOSE=develop
       - RUCIO_OIDC_AUTH=file
-      - RUCIO_OIDC_FILE_NAME=/tmp/rucio_token.json
+      - RUCIO_OIDC_FILE_NAME=/tmp/rucio_token
     ports:
       - "8888:8888"
   xrd1:

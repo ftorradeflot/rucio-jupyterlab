@@ -32,6 +32,7 @@ docker compose \
 	--file docker-compose-extension.yml \
 	--profile storage \
 	--profile extension \
+    --profile iam \
 	stop
 
 # remove all containers
@@ -40,6 +41,7 @@ docker compose \
 	--file docker-compose-extension.yml \
 	--profile storage \
 	--profile extension \
+    --profile iam \
 	rm --force
 
 sudo rm -rf /tmp/rucio_xrd1

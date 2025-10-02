@@ -18,8 +18,12 @@ REPO_PATH=$(realpath "$SCRIPT_DIR/rucio")
 
 # Change directory to the Git repository
 if cd "$REPO_PATH"; then
-    # Get the Git tag
-    export RUCIO_TAG=$(git describe --tags --abbrev=0 2>/dev/null)
+    # Check if RUCIO_TAG is set, if not, retrieve it from Git tags
+    if [[ ! -v RUCIO_TAG ]]; then
+        echo "RUCIO_TAG is not set. Attempting to retrieve from Git tags..."
+        # Get the Git tag
+        export RUCIO_TAG=$(git describe --tags --abbrev=0 2>/dev/null)
+    fi
 
     if [ -n "$RUCIO_TAG" ]; then
         export RUCIO_IMG="release-$RUCIO_TAG"
