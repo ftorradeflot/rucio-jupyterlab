@@ -102,7 +102,7 @@ before-build-python = ["jlpm clean:all"]
 ignore = ["W002"]
 
 [tool.check-manifest]
-ignore = ["rucio_jupyterlab/labextension/**", "yarn.lock", ".*", "package-lock.json", "junit.xml"]
+ignore = ["rucio_jupyterlab/labextension/**", "rucio_jupyterlab/_version.py", "yarn.lock", ".*", "package-lock.json", "junit.xml"]
 
 [project.entry-points."jupyter_server_config.d"]
 rucio_jupyterlab = "rucio_jupyterlab.server:load_jupyter_server_extension"
