@@ -40,10 +40,7 @@ export interface IRucioX509ProxyAuth extends IRucioAuth {
 }
 
 export type RucioAuthCredentials =
-  | IRucioUserpassAuth
-  | IRucioX509Auth
-  | IRucioX509ProxyAuth
-  | IRucioOIDCAuth;
+  IRucioUserpassAuth | IRucioX509Auth | IRucioX509ProxyAuth | IRucioOIDCAuth;
 
 export type RucioAuthType = 'userpass' | 'x509' | 'x509_proxy' | 'oidc';
 
@@ -94,12 +91,7 @@ export interface IDirectoryItem {
 }
 
 export type FileStatus =
-  | 'OK'
-  | 'REPLICATING'
-  | 'FETCHING'
-  | 'NOT_AVAILABLE'
-  | 'STUCK'
-  | 'FAILED';
+  'OK' | 'REPLICATING' | 'FETCHING' | 'NOT_AVAILABLE' | 'STUCK' | 'FAILED';
 export type CollectionStatus =
   | 'NOT_AVAILABLE'
   | 'AVAILABLE'
@@ -109,18 +101,10 @@ export type CollectionStatus =
   | 'STUCK'
   | 'EMPTY';
 export type ResolveStatus =
-  | 'NOT_RESOLVED'
-  | 'RESOLVING'
-  | 'PENDING_INJECTION'
-  | 'READY'
-  | 'FAILED';
+  'NOT_RESOLVED' | 'RESOLVING' | 'PENDING_INJECTION' | 'READY' | 'FAILED';
 
 export type DIDSearchType =
-  | 'collection'
-  | 'dataset'
-  | 'container'
-  | 'file'
-  | 'all';
+  'collection' | 'dataset' | 'container' | 'file' | 'all';
 
 export interface IDIDSearchResult {
   did: string;
